@@ -1,0 +1,30 @@
+{% set page = 'index' %}
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="display-5 text-center my-4 fw-bold text-body-emphasis">Книги</h1>
+
+<div class="container">
+    <div class="row g-4">
+
+        {% for tab in range(15) %}
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <img src="https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315"
+                     class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Название книги</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Название автора</h6>
+
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's
+                        content.</p>
+                    <a href="#" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
