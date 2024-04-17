@@ -2,29 +2,91 @@
 {% extends "base.html" %}
 
 {% block content %}
+<main>
 
-<h1 class="display-5 text-center my-4 fw-bold text-body-emphasis">Книги</h1>
-
-<div class="container">
-    <div class="row g-4">
-
-        {% for tab in range(15) %}
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <img src="https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315"
-                     class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title">Название книги</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Название автора</h6>
-
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's
-                        content.</p>
-                    <a href="#" class="btn btn-primary">Подробнее</a>
+    <!--    <section class="py-5 text-center container">-->
+    <!--        <div class="row py-lg-5">-->
+    <!--            <div class="col-lg-6 col-md-8 mx-auto">-->
+    <!--                <h1 class="fw-light">Album example</h1>-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </section>-->
+    <div class="container-fluid container-md my-4">
+        <div class="row g-2">
+            <div class="col">
+                <div class="form-floating">
+                    <select class="form-select" id="floatingSelect">
+                        <option value="1" selected>По алфавиту</option>
+                        <option value="1">По автору</option>
+                        <option value="2">Сначала новые</option>
+                        <option value="3">Сначала старые</option>
+                    </select>
+                    <label for="floatingSelect">Сортировка</label>
+                </div>
+            </div>
+            <div class="col">
+                <div class="input-group mb-3">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="floatingInputGrid" placeholder="">
+                        <label for="floatingInputGrid">Поиск</label>
+                    </div>
+                    <button type="submit" class="input-group-text">
+                        <svg fill="currentColor" width="20" height="20">
+                            <use xlink:href="#search"></use>
+                        </svg>
+                    </button>
                 </div>
             </div>
         </div>
-        {% endfor %}
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+
+            {% for tab in range(15) %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <img src="https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315"
+                         class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <div class="d-flex gap-2 justify-content-between">
+                            <div>
+                                <h5 class="card-title">Название книги</h5>
+                                <h6 class="card-subtitle text-body-secondary">Название автора</h6>
+                                <h6 class="card-subtitle text-body-secondary">1234 года</h6>
+                            </div>
+                            <input type="checkbox" id="heart{{loop.index}}" class="btn-check" autocomplete="off">
+                            <label class="btn heart" for="heart{{loop.index}}">
+                                <svg fill="currentColor" width="20" height="20">
+                                    <use xlink:href="#heart"></use>
+                                </svg>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
     </div>
-</div>
+
+</main>
+
+<!--<div class="container">-->
+<!--    <div class="row g-4">-->
+
+<!--        {% for tab in range(15) %}-->
+<!--        <div class="col">-->
+<!--            <div class="card" style="width: 18rem;">-->
+<!--                <img src="https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315"-->
+<!--                     class="card-img-top" alt="...">-->
+<!--                <div class="card-body">-->
+<!--                    <h5 class="card-title">Название книги</h5>-->
+<!--                    <h6 class="card-subtitle mb-2 text-body-secondary">Название автора</h6>-->
+
+<!--                    <a href="#" class="btn btn-primary">Подробнее</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        {% endfor %}-->
+<!--    </div>-->
+<!--</div>-->
 {% endblock %}

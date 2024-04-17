@@ -37,4 +37,4 @@ def admin():
 
 
 if __name__ == '__main__':
-    app.run(port=8080, host='127.0.0.1', debug=True)
+    app.run(port=8080, host='192.168.0.108', debug=True)
