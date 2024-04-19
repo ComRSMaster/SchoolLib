@@ -1,0 +1,22 @@
+<div class="col">
+    <div class="card shadow-sm">
+        <img src="{{book.preview}}"
+             class="card-img-top" alt="...">
+        <div class="card-body">
+            <div class="d-flex gap-2 justify-content-between">
+                <div>
+                    <h5 class="card-title">{{book.name}}</h5>
+                    <h6 class="card-subtitle text-body-secondary">{{book.author}}</h6>
+                    <h6 class="card-subtitle text-body-secondary">{{book.year}}</h6>
+                </div>
+                <button type="button" data-bs-toggle="modal" class="btn stretched-link" data-bs-target="#myModal">Launch modal</button>
+                <input type="checkbox" id="heart{{book.id}}" class="btn-check" autocomplete="off">
+                <label class="btn heart" for="heart{{book.id}}">
+                    <svg fill="currentColor" width="20" height="20">
+                        <use xlink:href="#heart"></use>
+                    </svg>
+                </label>
+            </div>
+        </div>
+    </div>
+</div>

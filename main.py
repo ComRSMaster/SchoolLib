@@ -13,7 +13,16 @@ tabs = {
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', tabs=tabs)
+    books = [
+        {'id': i,
+         'name': 'Название книги',
+         'author': 'Название автора',
+         'year': '1234',
+         'preview': 'https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315'
+         }
+        for i in range(10)
+    ]
+    return render_template('index.html', tabs=tabs, books=books)
 
 
 @app.route('/favourite')
@@ -37,4 +46,4 @@ def admin():
 
 
 if __name__ == '__main__':
-    app.run(port=8080, host='192.168.0.108', debug=True)
+    app.run(port=8080, host='localhost', debug=True)
