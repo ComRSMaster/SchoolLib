@@ -1,0 +1,15 @@
+{% set page = 'index' %}
+{% extends "base.html" %}
+{% block content %}
+<main class="text-center m-auto">
+    <h1 class="fw-bold display-1 mb-4">404</h1>
+    <h1>Страница не найдена</h1>
+    <a class="icon-link icon-link-hover mt-1" style="--bs-icon-link-transform: translateX(-.25em);"
+       href="#" onclick="history.back();return false;">
+        <svg class="bi" aria-hidden="true">
+            <use xlink:href="#arrow-left"></use>
+        </svg>
+        Вернуться назад
+    </a>
+</main>
+{% endblock %}

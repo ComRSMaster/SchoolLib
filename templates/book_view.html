@@ -1,21 +1,24 @@
-<div class="col">
-    <div class="card shadow-lg" onclick="const x = new bootstrap.Modal('#myModal', {})">
-        <img src="{{book.preview}}"
-             class="card-img-top" alt="...">
-        <div class="card-body">
-            <div class="d-flex gap-2 justify-content-between">
-                <div>
-                    <h5 class="card-title">{{book.name}}</h5>
-                    <h6 class="card-subtitle text-body-secondary">{{book.author}}</h6>
-                    <h6 class="card-subtitle text-body-secondary">{{book.year}}</h6>
-                </div>
-                <input type="checkbox" id="heart{{book.id}}" class="btn-check" autocomplete="off">
-                <label class="btn heart" for="heart{{book.id}}">
-                    <svg fill="currentColor" width="20" height="20">
-                        <use xlink:href="#heart"></use>
-                    </svg>
-                </label>
-            </div>
+<div class="d-flex flex-wrap m-3 mb-auto">
+    <div class="col-md-3">
+        <img src="{{book.preview}}" class="img-fluid" alt="...">
+    </div>
+    <div class="col-md-6 p-3">
+        <div>
+            <h5 class="card-title">{{book.name}}</h5>
+            <h6 class="card-subtitle text-body-secondary">{{book.author}}</h6>
+            <h6 class="card-subtitle mt-2 text-body-secondary">{{book.year}}</h6>
+        </div>
+    </div>
+    <div class="col-md-3 p-3">
+        <div class="d-grid gap-2">
+            <input type="checkbox" class="btn-check" id="like{{book.id}}" autocomplete="off"
+                   {% if book.liked %} checked {% endif %} onchange="like_expanded(this)" data-book-id={{book.id}}>
+            <label class="btn btn-outline-danger" for="like{{book.id}}" id="label_like{{book.id}}" >
+                {% if book.liked %} Из избранного {% else %} В избранное {% endif %}
+            </label>
+            <button class="btn btn-primary">
+                Забронировать
+            </button>
         </div>
     </div>
 </div>
