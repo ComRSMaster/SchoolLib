@@ -1,6 +1,9 @@
 from flask import Flask, render_template, abort
 
+from api import book_api, books
+
 app = Flask(__name__)
+app.register_blueprint(book_api)
 
 tabs = {
     'index': 'Главная',
@@ -8,17 +11,6 @@ tabs = {
     'profile': 'Профиль',
     'admin': 'Админка',
 }
-books = [
-    {
-        'id': i,
-        'name': 'Название книги',
-        'author': 'Название автора',
-        'year': 1234 + i,
-        'preview': 'https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg'
-                   '?1649262315',
-        'liked': i % 2 == 0
-    } for i in range(10)
-]
 
 
 @app.route('/')
@@ -49,25 +41,14 @@ def admin():
 
 @app.route('/book/<int:book_id>')
 def like(book_id):
-    if book_id > len(books):
+    try:
+        return render_template('book_page.html', tabs=tabs, book=books[book_id])
+    except KeyError:
         abort(404)
-    return render_template('book_page.html', tabs=tabs, book=books[book_id])
-
-
-@app.route('/like/<int:book_id>/', methods=['POST'])
-def unlike(book_id):
-    print('li', book_id)
-    return '', 200
-
-
-@app.route('/unlike/<int:book_id>/', methods=['POST'])
-def two_params(book_id):
-    print('un', book_id)
-    return '', 200
 
 
 @app.errorhandler(404)
-def two_params(book_id):
+def two_params():
     return render_template('404.html', tabs=tabs), 404
 
 

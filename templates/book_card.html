@@ -1,5 +1,5 @@
 <div class="col">
-    <div class="card shadow-sm">
+    <div class="card shadow-sm" role="link" onclick="openBook({{book.id}})">
         <img src="{{book.preview}}"
              class="card-img-top" alt="...">
         <div class="card-body">
@@ -9,13 +9,16 @@
                     <h6 class="card-subtitle text-body-secondary">{{book.author}}</h6>
                     <h6 class="card-subtitle text-body-secondary">{{book.year}}</h6>
                 </div>
-                <button type="button" data-bs-toggle="modal" class="btn" data-bs-target="#myModal">Launch modal</button>
-                <input type="checkbox" id="heart{{book.id}}" class="btn-check" autocomplete="off">
-                <label class="btn heart" for="heart{{book.id}}">
-                    <svg fill="currentColor" width="20" height="20">
-                        <use xlink:href="#heart"></use>
-                    </svg>
-                </label>
+                <div onclick="event.stopPropagation();">
+                    <input type="checkbox" id="heart{{book.id}}" class="btn-check" autocomplete="off"
+                           {% if book.liked %} checked {% endif %}
+                           onchange="sendLike(this)" data-book-id={{book.id}}>
+                    <label class="btn heart" for="heart{{book.id}}">
+                        <svg fill="currentColor" width="20" height="20">
+                            <use xlink:href="#heart"></use>
+                        </svg>
+                    </label>
+                </div>
             </div>
         </div>
     </div>
