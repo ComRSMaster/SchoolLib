@@ -1,6 +1,6 @@
 from flask import Flask, render_template, abort
 
-from api import book_api, books
+from api import book_api
 
 app = Flask(__name__)
 app.register_blueprint(book_api)
@@ -16,7 +16,7 @@ tabs = {
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', tabs=tabs, books=books)
+    return render_template('index.html', tabs=tabs)
 
 
 @app.route('/favourite')

@@ -14,7 +14,7 @@
             <ul class="navbar-nav nav-underline">
                 {% for tab in tabs %}
                 <li class="nav-item">
-                    <a {% if tab == page %}
+                    <a {% if tabs[tab] == page %}
                        class="nav-link active" aria-current="page"
                        {% else %}
                        class="nav-link"
