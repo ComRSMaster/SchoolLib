@@ -1,6 +1,6 @@
 from flask import Flask, render_template, abort
 
-from api import book_api
+from api import book_api, get_book
 
 app = Flask(__name__)
 app.register_blueprint(book_api)
@@ -8,7 +8,6 @@ app.register_blueprint(book_api)
 tabs = {
     'index': 'Главная',
     'favourite': 'Избранное',
-    'profile': 'Профиль',
     'admin': 'Админка',
 }
 
@@ -24,11 +23,6 @@ def favourite():
     return render_template('favourite.html', tabs=tabs)
 
 
-@app.route('/profile')
-def profile():
-    return render_template('profile.html', tabs=tabs)
-
-
 @app.route('/about')
 def about():
     return render_template('about.html', tabs=tabs)
@@ -42,7 +36,7 @@ def admin():
 @app.route('/book/<int:book_id>')
 def like(book_id):
     try:
-        return render_template('book_page.html', tabs=tabs, book=books[book_id])
+        return render_template('book_page.html', tabs=tabs, book=get_book(book_id))
     except KeyError:
         abort(404)
 

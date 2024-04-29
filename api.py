@@ -23,19 +23,26 @@ def get_book(book_id):
 
 
 @book_api.route('/like/<int:book_id>', methods=['POST'])
-def unlike(book_id):
+def like(book_id):
     print('li', book_id)
     return '', 200
 
 
 @book_api.route('/unlike/<int:book_id>', methods=['POST'])
-def two_params(book_id):
+def unlike(book_id):
     print('un', book_id)
+    return '', 200
+
+
+@book_api.route('/book_book/<int:book_id>', methods=['POST'])
+def book_book(book_id):
+    print('bb', book_id)
     return '', 200
 
 
 @book_api.route('/get_books', methods=['GET'])
 def get_books():
+    # preview_ratio = width / height
     books = [
         {
             'id': i,
