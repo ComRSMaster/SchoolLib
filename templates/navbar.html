@@ -14,7 +14,7 @@
             <ul class="navbar-nav nav-underline">
                 {% for tab in tabs %}
                 <li class="nav-item">
-                    <a {% if tabs[tab]== page %}
+                    <a {% if tabs[tab]== title %}
                        class="nav-link active" aria-current="page"
                        {% else %}
                        class="nav-link"
@@ -22,19 +22,6 @@
                        href="/{{tab}}">{{ tabs[tab] }}</a>
                 </li>
                 {% endfor %}
-            </ul>
-        </div>
-        <div class="dropdown-center dropstart text-end">
-            <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle"
-               data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
-            </a>
-            <ul class="dropdown-menu text-small">
-                <li><a class="dropdown-item" href="/profile">Профиль</a></li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Выйти</a></li>
             </ul>
         </div>
     </div>

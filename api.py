@@ -2,6 +2,9 @@ import random
 
 from flask import Blueprint
 
+from data import db_session
+from data.books import Book
+
 book_api = Blueprint('book_api', __name__)
 
 
@@ -43,16 +46,20 @@ def book_book(book_id):
 @book_api.route('/get_books', methods=['GET'])
 def get_books():
     # preview_ratio = width / height
-    books = [
-        {
-            'id': i,
-            'name': 'Название книги',
-            'author': 'Название автора',
-            'year': 1234 + i,
-            'preview_url': 'https://www.centrmag.ru/catalog/ev_27_5_22_2_3d_p.jpg' if i % 2 == 1 else
-            'https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315',
-            'preview_ratio': 500 / 634 if i % 2 == 1 else 363 / 479,
-            'is_liked': random.randint(1, 4) == 1
-        } for i in range(30)
-    ]
+
+    db_sess = db_session.create_session()
+    books = db_sess.query(Book)
+    # books = [
+    #     {
+    #         'id': i,
+    #         'name': 'Название книги',
+    #         'author': 'Название автора',
+    #         'year': 1234 + i,
+    #         'preview_url': 'https://www.centrmag.ru/catalog/ev_27_5_22_2_3d_p.jpg' if i % 2 == 1 else
+    #         'https://img3.labirint.ru/rc/97a0faacd383913a014649bc82c620cd/363x561q80/books86/850859/cover.jpg?1649262315',
+    #         'preview_ratio': 500 / 634 if i % 2 == 1 else 363 / 479,
+    #         'is_liked': random.randint(1, 4) == 1
+    #     } for i in range(30)
+    # ]
+
     return books
