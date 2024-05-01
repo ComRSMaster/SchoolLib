@@ -1,9 +1,15 @@
+{% set tabs = [
+    ('index', 'Главная'),
+    ('favourite', 'Избранное'),
+    ('profile', 'Профиль')
+] %}
 <nav class="navbar navbar-expand-md sticky-top bg-dark shadow">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">
-            <svg class="bi d-inline-block align-text-top me-1" width="30" height="30">
+            <svg class="bi d-inline-block align-text-top me-2" width="30" height="30">
                 <use xlink:href="#phtsh-wb"></use>
-            </svg>
+            </svg
+            >
             <div class="d-inline d-md-none d-lg-inline">Библиотека ФТШ</div>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
@@ -12,15 +18,18 @@
         </button>
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav nav-underline">
-                {% for tab in tabs %}
-                <li class="nav-item">
-                    <a {% if tabs[tab]== title %}
-                       class="nav-link active" aria-current="page"
-                       {% else %}
-                       class="nav-link"
-                       {% endif %}
-                       href="/{{tab}}">{{ tabs[tab] }}</a>
-                </li>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    {{ tabs.append(('admin', 'Админка')) or '' }}
+                {% endif %}
+                {% for url, name in tabs %}
+                    <li class="nav-item">
+                        <a {% if name == title %}
+                            class="nav-link active" aria-current="page"
+                        {% else %}
+                            class="nav-link"
+                        {% endif %}
+                            href="/{{ url }}">{{ name }}</a>
+                    </li>
                 {% endfor %}
             </ul>
         </div>

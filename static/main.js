@@ -1,6 +1,7 @@
 let toastLiveExample = document.getElementById('liveToast')
 let toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
-let container = document.getElementById('books-container')
+let container = document.getElementById('booksContainer')
+let orderInput = document.getElementById('orderInput')
 let de = document.documentElement
 
 book_card_dom = (id, name, author, year, preview_url, preview_ratio, is_liked) => {
@@ -30,32 +31,28 @@ book_card_dom = (id, name, author, year, preview_url, preview_ratio, is_liked) =
     </div>
 </div>`
 }
+let lastBook = 0,
+    all_loaded = false
 
 async function loadBooks() {
-    let resp = await fetch('/get_books')
+    let resp = await fetch('api/books?' + new URLSearchParams({
+        order: orderInput.value,
+        offset: lastBook,
+    }))
     console.log(resp)
-
-    parseBooks(await resp.json())
-    //     .then(r => {
-    //     if (r.ok) {
-    //         parseBooks(r.json())
-    //     } else {
-    //         toastBootstrap.show()
-    //     }
-    //     console.log(r)
-    // }).catch(e => {
-    //     console.log(e)
-    //     toastBootstrap.show()
-    // });
+    if (resp.ok) {
+        let data = await resp.json()
+        all_loaded = data.all_loaded
+        parseBooks(data.books)
+    } else
+        toastBootstrap.show()
 }
 
 loadBooks()
 
 parseBooks = (books) => {
-    window.onload = () => {
-        console.log('load')
-    }
     console.log(books)
+    lastBook += books.length
     let books_dom = ''
     for (let book of books) {
         books_dom += book_card_dom(
@@ -64,10 +61,16 @@ parseBooks = (books) => {
     }
     container.innerHTML += books_dom
 }
-
+orderInput.onchange = () => {
+    all_loaded = false
+    lastBook = 0
+    container.innerHTML = ''
+    loadBooks()
+}
 window.addEventListener(
     "scroll",
     () => {
+        if (all_loaded) return
         if (Math.abs(de.scrollHeight - de.clientHeight - de.scrollTop) < 150) {
             loadBooks()
             console.log('asdf')
@@ -89,9 +92,10 @@ likeExpanded = (btn) => {
 }
 
 sendLike = (btn) => {
-    fetch(btn.checked ? '/like/' : '/unlike/' + btn.dataset.bookId, {
-        method: "POST"
-    }).then(r => {
+    fetch('/api/like?' + new URLSearchParams({
+        book_id: btn.dataset.bookId,
+        is_like: btn.checked
+    })).then(r => {
         console.log(r)
         if (!r.ok) {
             toastBootstrap.show()

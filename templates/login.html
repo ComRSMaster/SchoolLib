@@ -2,19 +2,32 @@
 
 {% block content %}
 
-<form class="m-auto p-3" style="max-width: 330px" method="post" novalidate>
-    <h1 class="h3 mb-3 fw-normal">Пожалуйста, войдите</h1>
+<form class="m-auto p-3" style="max-width: 330px" method="post">
+    {{ form.hidden_tag() }}
+    <h3 class="mb-4 fw-normal">Пожалуйста, войдите</h3>
 
     <div class="form-floating">
-        <input type="email" class="form-control" id="username" placeholder="">
-        <label for="username">Имя пользователя</label>
+        {{ form.username(class="form-control", type="text", placeholder="", autocomplete="username") }}
+
+        {{ form.username.label }}
+        {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
     </div>
-    <div class="form-floating">
-        <input type="password" class="form-control" id="password" placeholder="">
-        <label for="password">Пароль</label>
+    <div class="form-floating mt-2">
+        {{ form.password(class="form-control", type="password", placeholder="") }}
+        {{ form.password.label }}
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
     </div>
 
-    <button class="btn btn-primary w-100 py-2 mt-3" type="submit">Войти</button>
+    {{ form.submit(type="submit", class="btn btn-primary w-100 py-2 mt-3") }}
+    <div>{{ message }}</div>
 </form>
 
 {% endblock %}
