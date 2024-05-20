@@ -2,8 +2,8 @@ import sqlalchemy
 from .db_session import SqlAlchemyBase
 
 
-class Like(SqlAlchemyBase):
-    __tablename__ = 'likes'
+class Booked_list(SqlAlchemyBase):
+    __tablename__ = 'booked_list'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)

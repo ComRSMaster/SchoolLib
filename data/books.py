@@ -1,6 +1,11 @@
 import sqlalchemy
 
 from .db_session import SqlAlchemyBase
+# from flask import Flask
+# from sqlalchemy_utils.types import TSVectorType
+# from sqlalchemy_searchable import SearchQueryMixin, make_searchable
+
+
 
 
 class Book(SqlAlchemyBase):

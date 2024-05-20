@@ -1,7 +1,8 @@
 {% set tabs = [
     ('index', 'Главная'),
     ('favourite', 'Избранное'),
-    ('profile', 'Профиль')
+    ('booked', 'Забронированное'),
+    ('profile', 'Профиль'),
 ] %}
 <nav class="navbar navbar-expand-md sticky-top bg-dark shadow">
     <div class="container-fluid">
@@ -19,7 +20,8 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav nav-underline">
                 {% if current_user.is_authenticated and current_user.is_admin %}
-                    {{ tabs.append(('admin', 'Админка')) or '' }}
+                    {{ tabs.append(('admin', 'Данные')) or '' }}
+                    {{ tabs.append(('change', 'Админ-панель')) or '' }}
                 {% endif %}
                 {% for url, name in tabs %}
                     <li class="nav-item">

@@ -1,6 +1,7 @@
-from flask import jsonify, request, abort
+from flask import jsonify, request, abort, redirect
 from flask_restful import Resource
 from marshmallow import Schema, fields, ValidationError
+from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 
 class UserResource(Resource):
@@ -32,11 +33,13 @@ class LikeResource(Resource):
     schema = LikeSchema()
 
     def get(self):
+        if not current_user.is_authenticated:
+            return redirect('/login')
         try:
             args = self.schema.load(request.args)
         except ValidationError as err:
             abort(400, err)
-        print(args)
+            print(args, current_user)
         return '', 200
 
 

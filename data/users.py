@@ -13,7 +13,7 @@ class User(SqlAlchemyBase, UserMixin):
                            primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String)
     username = sqlalchemy.Column(sqlalchemy.String, unique=True, index=True)
-    photo_url = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    # photo_url = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     grade_id = sqlalchemy.Column(sqlalchemy.Integer,
                                  sqlalchemy.ForeignKey("grades.id"))
@@ -22,6 +22,9 @@ class User(SqlAlchemyBase, UserMixin):
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)
+        # print('1/', self.hashed_password, password)
 
     def check_password(self, password):
+        # print('2/', self.hashed_password, generate_password_hash(password), password, check_password_hash(
+        # self.hashed_password, password))
         return check_password_hash(self.hashed_password, password)

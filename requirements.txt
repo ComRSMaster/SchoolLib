@@ -4,3 +4,4 @@ flask-login
 sqlalchemy
 flask-restful
 marshmallow
+SQLAlchemy-Searchable
