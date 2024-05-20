@@ -1,137 +1,102 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container-fluid container-md py-4 mb-auto">
-    <h1 class="display-5 fw-bold text-body-emphasis">Админ-панель</h1>
-  <h3 class="display-5 fw-bold text-body-emphasis">Пользователи</h3>
-<div class="bd-example-snippet bd-code-snippet">
-  <div class="bd-example m-0 border-0">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-              <th scope="col">ID ученика</th>
-              <th scope="col">Имя</th>
-              <th scope="col">Логин</th>
-              <th scope="col">Фото</th>
-              <th scope="col">Класс</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for item in items %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.username }}</td>
-                <td>{{ item.photo_url }}</td>
-                <td>{{ item.grade_id }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-  </div>
-</div>
-  <h3 class="display-5 fw-bold text-body-emphasis">Книги</h3>
-<div class="bd-example-snippet bd-code-snippet">
-  <div class="bd-example m-0 border-0">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-              <th scope="col">Id</th>
-              <th scope="col">Название</th>
-              <th scope="col">Автор</th>
-              <th scope="col">Год выпуска</th>
-              <th scope="col">Описание</th>
-              <th scope="col">Осталось</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for item in itemsbooks %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>{{ item.author }}</td>
-                <td>{{ item.year }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.left }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-  </div>
-</div>
+    <div class="container-fluid container-md py-4 mb-auto">
+        <h1 class="display-5 fw-bold text-body-emphasis">Админ-панель</h1>
+        <h3 class="display-5 fw-bold text-body-emphasis">Пользователи
+            <a class="btn btn-primary ms-2" href="/user_add" role="button" aria-disabled="true">+ Добавить</a>
+        </h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID ученика</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Класс</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.id }}
+                                <a class="btn" href="/user_edit/{{ item.id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#pencil"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.grade.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h3 class="display-5 fw-bold text-body-emphasis">Книги
+            <a class="btn btn-primary ms-2" href="/book_add" role="button" aria-disabled="true">+ Добавить</a>
+        </h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Год выпуска</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Осталось</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in itemsbooks %}
+                        <tr>
+                            <td>{{ item.id }}
+                                <a class="btn" href="/book_edit/{{ item.id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#pencil"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.author }}</td>
+                            <td>{{ item.year }}</td>
+                            <td>{{ item.description }}</td>
+                            <td>{{ item.left }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-
-  <h3 class="display-5 fw-bold text-body-emphasis">Забронированные книги</h3>
-<div class="bd-example-snippet bd-code-snippet">
-  <div class="bd-example m-0 border-0">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-              <th scope="col">Номер брони</th>
-              <th scope="col">ID ученика</th>
-              <th scope="col">ID книги</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for item in itemsbooked %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.user_id }}</td>
-                <td>{{ item.book_id }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-  </div>
-</div>
-
-<h3 class="display-5 fw-bold text-body-emphasis">Добавление нового пользователя</h3>
-<form method="POST" action="/reg_Run" id="user1">
-    <div class="mb-3">
-            <input type="text" name="name" class="form-control" placeholder="Имя пользователя" id="userInput1" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <input type="text" name="login" class="form-control" placeholder='Логин пользователя' id="userInput2" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <input type="text" name="password" class="form-control" placeholder="Пароль" id="userInput3" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <input type="number" name="class" class="form-control" placeholder="Класс" id="userInput4" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <input type="number" name="adminrights" class="form-control" placeholder="Права администрации" id="userInput5" aria-describedby="emailHelp">
-          </div>
-    <button type="submit1" onclick="addUser"class="btn btn-primary">Submit</button>
-</form>
-<h3></h3>
-
-
-<h3 class="display-5 fw-bold text-body-emphasis">Добавление новой книги</h3>
-<form id="book1">
-    <div class="mb-3">
-            <label for="bookInput1" class="form-label">Название</label>
-            <input type="text" class="form-control" id="bookInput1" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <label for="bookInput2" class="form-label">Автор</label>
-            <input type="text" class="form-control" id="bookInput2" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <label for="bookInput3" class="form-label">Год выпуска</label>
-            <input type="number" class="form-control" id="bookInput3" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <label for="bookInput4" class="form-label">Описание</label>
-            <input type="text" class="form-control" id="bookInput4" aria-describedby="emailHelp">
-          </div>
-    <div class="mb-3">
-            <label for="bookInput5" class="form-label">Кол-во экземпляров</label>
-            <input type="number" class="form-control" id="bookInput5" aria-describedby="emailHelp">
-          </div>
-    <button type="submit2" class="btn btn-primary">Submit</button>
-</form>
-
-</div>
+        <h3 class="display-5 fw-bold text-body-emphasis">Забронированные книги</h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Номер брони</th>
+                        <th scope="col">ID ученика</th>
+                        <th scope="col">ID книги</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in itemsbooked %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.user_id }}</td>
+                            <td>{{ item.book_id }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

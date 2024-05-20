@@ -20,8 +20,7 @@
         <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
             <ul class="navbar-nav nav-underline">
                 {% if current_user.is_authenticated and current_user.is_admin %}
-                    {{ tabs.append(('admin', 'Данные')) or '' }}
-                    {{ tabs.append(('change', 'Админ-панель')) or '' }}
+                    {{ tabs.append(('admin', 'Админ-панель')) or '' }}
                 {% endif %}
                 {% for url, name in tabs %}
                     <li class="nav-item">

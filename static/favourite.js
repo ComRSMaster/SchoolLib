@@ -65,7 +65,6 @@ window.addEventListener(
         if (all_loaded_favor) return
         if (Math.abs(de_favor.scrollHeight - de_favor.clientHeight - de_favor.scrollTop) < 150) {
             loadBooks_favor()
-            console.log('asdf')
         }
     },
     {

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <form class="m-auto p-3" style="max-width: 400px" method="post">
+        {{ form.hidden_tag() }}
+        <h3 class="mb-4 fw-normal">Изменить книгу</h3>
+        <div class="form-floating">
+            {{ form.name(class="form-control", type="text", placeholder="", autocomplete="name") }}
+
+            {{ form.name.label }}
+            {% for error in form.name.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating my-2">
+            {{ form.author(class="form-control", type="text", placeholder="", autocomplete="author") }}
+
+            {{ form.author.label }}
+            {% for error in form.author.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating">
+            {{ form.year(class="form-control", type="number", placeholder="", autocomplete="year") }}
+
+            {{ form.year.label }}
+            {% for error in form.year.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-floating my-2">
+            {{ form.description(class="form-control", type="text", placeholder="", autocomplete="description") }}
+
+            {{ form.description.label }}
+            {% for error in form.description.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div class="form-floating my-2">
+            {{ form.left(class="form-control", type="number", placeholder="", autocomplete="left") }}
+
+            {{ form.left.label }}
+            {% for error in form.left.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.submit(type="submit", class="btn btn-primary w-100 py-2 mt-4") }}
+            {% if form.meta.book_id %}
+                <button type="submit" formaction='/book_delete/{{ form.meta.book_id }}'
+                        class="btn btn-danger w-100 py-2 mt-4" formnovalidate>
+                    Удалить книгу
+                </button>
+            {% endif %}
+        </div>
+        <div>{{ message }}</div>
+    </form>
+
+{% endblock %}
