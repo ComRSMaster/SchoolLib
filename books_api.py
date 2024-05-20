@@ -1,10 +1,13 @@
 from flask import jsonify, request, abort
+from flask_login import current_user
 from flask_restful import Resource
 from marshmallow import Schema, fields, ValidationError
 from sqlalchemy import select
 
 from data import db_session
 from data.books import Book
+from data.likes import Like
+from data.booked_list import Booked_list
 
 
 class BookResource(Resource):
@@ -52,5 +55,9 @@ class BooksListResource(Resource):
         query = select(Book.id, Book.name, Book.author, Book.year,
                        Book.preview_url, Book.preview_ratio
                        ).order_by(order).offset(args['offset']).limit(self.LIMIT)
+        if 'only' in args.keys() and args['only'] == 1:
+            query = query.join(Like, Like.book_id == Book.id).filter(Like.user_id == current_user.get_id())
+        if 'only' in args.keys() and args['only'] == 2:
+            query = query.join(Booked_list, Booked_list.book_id == Book.id).filter(Booked_list.user_id == current_user.get_id())
         books = session.execute(query).fetchall()
         return jsonify({'all_loaded': len(books) < self.LIMIT, 'books': [dict(item._mapping) for item in books]})

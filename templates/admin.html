@@ -1,7 +1,102 @@
 {% extends "base.html" %}
 
 {% block content %}
+    <div class="container-fluid container-md py-4 mb-auto">
+        <h1 class="display-5 fw-bold text-body-emphasis">Админ-панель</h1>
+        <h3 class="display-5 fw-bold text-body-emphasis">Пользователи
+            <a class="btn btn-primary ms-2" href="/user_add" role="button" aria-disabled="true">+ Добавить</a>
+        </h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID ученика</th>
+                        <th scope="col">Имя</th>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Класс</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.id }}
+                                <a class="btn" href="/user_edit/{{ item.id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#pencil"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.username }}</td>
+                            <td>{{ item.grade.name }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <h3 class="display-5 fw-bold text-body-emphasis">Книги
+            <a class="btn btn-primary ms-2" href="/book_add" role="button" aria-disabled="true">+ Добавить</a>
+        </h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Год выпуска</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Осталось</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in itemsbooks %}
+                        <tr>
+                            <td>{{ item.id }}
+                                <a class="btn" href="/book_edit/{{ item.id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#pencil"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.author }}</td>
+                            <td>{{ item.year }}</td>
+                            <td>{{ item.description }}</td>
+                            <td>{{ item.left }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-<h1 class="display-5 fw-bold text-body-emphasis">Админка ФТШ</h1>
+        <h3 class="display-5 fw-bold text-body-emphasis">Забронированные книги</h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Номер брони</th>
+                        <th scope="col">ID ученика</th>
+                        <th scope="col">ID книги</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in itemsbooked %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.user_id }}</td>
+                            <td>{{ item.book_id }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

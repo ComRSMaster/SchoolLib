@@ -1,0 +1,10 @@
+const form1 = document.getElementById('user1')
+form1.addEventListener('submit', () => {
+    const formData = new FormData(form1)
+    const name = formData.get('userInput1')
+    const username = formData.get('userInput2')
+    const password = formData.get('userInput3')
+    const classnumb = formData.get('userInput4')
+    const adminrights = formData.get('userInput5')
+    console.log(name)
+})
