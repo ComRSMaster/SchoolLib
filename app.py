@@ -76,7 +76,7 @@ def book_view(book_id):
     book = session.query(Book).get(book_id)
     if not book:
         abort(404)
-    return render_template('book_page.html', title=book['name'], book=book)
+    return render_template('book_page.html', title=book.name, book=book)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -101,7 +101,7 @@ def logout():
 
 
 @app.errorhandler(404)
-def error_404():
+def error_404(e):
     return render_template('404.html', title='Страница не найдена'), 404
 
 
