@@ -48,6 +48,18 @@
                 </div>
             {% endfor %}
         </div>
+
+        <div class="form-floating">
+            {{ form.preview_url(class="form-control", type="text", placeholder="", autocomplete="preview_url") }}
+
+            {{ form.preview_url.label }}
+            {% for error in form.preview_url.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
         <div class="form-floating my-2">
             {{ form.left(class="form-control", type="number", placeholder="", autocomplete="left") }}
 

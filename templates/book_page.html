@@ -20,8 +20,8 @@
             <label class="btn btn-outline-danger" for="like{{book.id}}" id="label_like{{book.id}}" >
                 {% if bookliked %} Из избранного {% else %} В избранное {% endif %}
             </label>
-            <button class="btn btn-primary">
-                Забронировать
+            <button onclick="borrowBook(this)" class="btn btn-primary" id="borrow{{book.id}}">
+                {% if bookleft %} Забронировать {% else %} Нет в наличие {% endif %}
             </button>
         </div>
     </div>

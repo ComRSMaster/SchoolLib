@@ -19,6 +19,7 @@ from data.grades import Grade
 from data.likes import Like
 from data.booked_list import Booked_list
 from data.users import User
+from data.borrowed import Borrowed
 from loginform import LoginForm, AddUser, AddBook
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
@@ -95,6 +96,7 @@ def user_add():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.username == form.login.data).first()
         print(user)
+        print(form.name.data, form.login.data, form.class_numb.data, form)
 
         if user:
             form.login.errors.append("Имя пользователя занято")
@@ -128,6 +130,7 @@ def user_edit(user_id):
     if form.validate_on_submit():
         form.password.check_validators([DataRequired()])
         print(form.class_numb.data)
+        print(form.is_admin.data)
         user.name = form.name.data
         user.username = form.login.data
         user.grade_id = form.class_numb.data
@@ -142,6 +145,7 @@ def user_edit(user_id):
         form.class_numb.data = user.grade_id
         form.is_admin.data = user.is_admin
         form.meta.user_id = user.id
+        print(form.is_admin.data)
 
     return render_template('useredit.html', form=form, title='Изменение пользователя')
 
@@ -173,8 +177,9 @@ def book_add():
         book = Book(
             name=form.name.data, author=form.author.data,
             description=form.description.data, year=form.year.data,
-            left=form.left.data
+            left=form.left.data, preview_url=form.preview_url.data, preview_ratio=form.preview_ratio
         )
+
         db_sess.add(book)
         db_sess.commit()
         print('added', 'rows + 1', current_user.get_id())
@@ -200,16 +205,20 @@ def book_edit(book_id):
         book.description = form.description.data
         book.year = form.year.data
         book.left = form.left.data
+        book.preview_url = form.preview_url.data
+        print(book.preview_url)
         db_sess.commit()
         print('edited', current_user.get_id())
         return redirect('/admin')
     else:
+        print(form.preview_url)
         form.name.data = book.name
         form.author.data = book.author
         form.description.data = book.description
         form.year.data = book.year
         form.left.data = book.left
         form.meta.book_id = book.id
+        form.preview_url.data = book.preview_url
     return render_template('bookedit.html', form=form, title='Изменение книги')
 
 
@@ -242,8 +251,11 @@ def admin():
 
     query_booked = select(Booked_list.id, Booked_list.user_id, Booked_list.book_id).order_by(Booked_list.id)
     query_booked = session.execute(query_booked).fetchall()
+
+    query_borrowed = select(Borrowed.id, Borrowed.user_id, Borrowed.book_id).order_by(Borrowed.id)
+    query_borrowed = session.execute(query_borrowed).fetchall()
     return render_template('admin.html', title='Админ-панель', items=query_us, itemsbooks=query_books,
-                           itemsbooked=query_booked)
+                           itemsbooked=query_booked, borrowedbooks=query_borrowed)
 
 
 @app.route('/profile')
@@ -260,14 +272,18 @@ def book_view(book_id):
     if not book:
         abort(404)
     print(book, book_id)
+    if book.left == 0:
+        bookleft = False
+    else:
+        bookleft = True
     books = session.execute(
         select(Like.user_id, Like.book_id).order_by(Like.book_id).offset(0).limit(25).filter(Like.book_id == book.id,
                                                                                              Like.user_id == current_user.get_id())).fetchall()
     print(books)
     if not books:
-        return render_template('book_page.html', title=book.name, book=book, bookliked=False)
+        return render_template('book_page.html', title=book.name, book=book, bookliked=False, bookleft=bookleft)
     else:
-        return render_template('book_page.html', title=book.name, book=book, bookliked=True)
+        return render_template('book_page.html', title=book.name, book=book, bookliked=True, bookleft=bookleft)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -315,7 +331,7 @@ def search():
                     order = Book.year
                 else:
                     order = Book.name
-                # print(order)
+                print(order)
                 query = select(Book.id, Book.name, Book.author, Book.year,
                                Book.preview_url, Book.preview_ratio
                                ).order_by(order).offset(0).limit(25)
@@ -331,6 +347,7 @@ def search():
 
 
 @app.route('/apifavor', methods=['GET', 'POST'])
+@login_required
 def api_favor():
     if current_user.is_authenticated:
         if request.method == 'GET':
@@ -362,6 +379,137 @@ def api_favor():
                         return jsonify(success=True)
                 else:
                     raise KeyError('Value key not found')
+            except (KeyError, json.JSONDecodeError) as e:
+                return jsonify({'error': 'Invalid data format'}), 400
+    else:
+        return redirect('/login')
+
+
+@app.route('/apibook', methods=['GET', 'POST'])
+@login_required
+def api_book():
+    print(1)
+    if current_user.is_authenticated:
+        if request.method == 'GET':
+            return render_template('404.html', title='Страница не найдена'), 404
+        elif request.method == 'POST':
+            try:
+                data = request.json
+                session = db_session.create_session()
+                if 'id' in data:
+                    id = validate(data['id'])[6:]
+                    print(id)
+                    book = session.query(Book).filter(Book.id == id).first()
+                    if book.left != 0:
+                        book.left = book.left - 1
+                        rows = session.query(Booked_list).count()
+                        query = (
+                            insert(Booked_list).values(id=rows + 1, user_id=current_user.get_id(), book_id=id)
+                        )
+                        session.execute(query)
+                        session.commit()
+                        print('destroyed')
+                        return redirect('/booked')
+                    else:
+                        return jsonify({'error': 'Invalid data format'}), 400
+            except (KeyError, json.JSONDecodeError) as e:
+                return jsonify({'error': 'Invalid data format'}), 400
+    else:
+        return redirect('/login')
+
+
+@app.route('/apitake', methods=['GET', 'POST'])
+@login_required
+def delbooked():
+    print(2)
+    if current_user.is_authenticated and current_user.is_admin:
+        if request.method == 'GET':
+            return render_template('404.html', title='Страница не найдена'), 404
+        elif request.method == 'POST':
+            try:
+                session = db_session.create_session()
+                data = request.json
+                if 'id' in data:
+                    id = validate(data['id'])[5:]
+                    idx = validate(data['idx'])[5:]
+                    print(id)
+                    book = session.query(Book).get(id)
+                    book.left = book.left + 1
+                    session.commit()
+                    session = db_session.create_session()
+                    query = (
+                        delete(Booked_list).where(Booked_list.user_id == idx,
+                                                  Booked_list.book_id == id)
+                    )
+                    session.execute(query)
+                    session.commit()
+                    return redirect('/admin')
+            except (KeyError, json.JSONDecodeError) as e:
+                return jsonify({'error': 'Invalid data format'}), 400
+    else:
+        return redirect('/login')
+
+
+@app.route('/apigive', methods=['GET', 'POST'])
+@login_required
+def givebooked():
+    if current_user.is_authenticated and current_user.is_admin:
+        if request.method == 'GET':
+            return render_template('404.html', title='Страница не найдена'), 404
+        elif request.method == 'POST':
+            try:
+                data = request.json
+                print(data)
+                if 'id' in data:
+                    id = validate(data['id'])[5:]
+                    idx = validate(data['idx'])[5:]
+                    session = db_session.create_session()
+                    # book = session.query(Book).get(id)
+                    query = (
+                        delete(Booked_list).where(Booked_list.user_id == idx,
+                                                  Booked_list.book_id == id)
+                    )
+                    session.execute(query)
+                    session.commit()
+                    query = (
+                        insert(Borrowed).values(id=session.query(Borrowed).count() + 1,
+                                                user_id=idx, book_id=id)
+                    )
+                    session.execute(query)
+                    session.commit()
+                    return redirect('/admin')
+            except (KeyError, json.JSONDecodeError) as e:
+                return jsonify({'error': 'Invalid data format'}), 400
+    else:
+        return redirect('/login')
+
+
+@app.route('/remove', methods=["GET", "POST"])
+@login_required
+def remove():
+    if current_user.is_authenticated and current_user.is_admin:
+        if request.method == 'GET':
+            return render_template('404.html', title='Страница не найдена'), 404
+        elif request.method == 'POST':
+            try:
+                data = request.json
+                print(data)
+                if 'id' in data:
+                    id = validate(data['id'])[4:]
+                    idx = validate(data['idx'])[4:]
+                    session = db_session.create_session()
+                    book = session.query(Book).get(id)
+                    print(book)
+                    query = (
+                        delete(Borrowed).where(Borrowed.user_id == idx,
+                                               Borrowed.book_id == id)
+                    )
+                    session.execute(query)
+                    session.commit()
+                    book.left = book.left + 1
+                    session.execute(query)
+                    session.commit()
+                    return redirect('/admin')
             except (KeyError, json.JSONDecodeError) as e:
                 return jsonify({'error': 'Invalid data format'}), 400
     else:

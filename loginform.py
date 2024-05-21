@@ -42,4 +42,6 @@ class AddBook(FlaskForm):
     year = StringField('Год выпуска', validators=[DataRequired()])
     description = StringField('Описание', validators=[DataRequired()])
     left = StringField('Осталось', validators=[DataRequired()])
+    preview_url = StringField('Ссылка', validators=[DataRequired()])
+    preview_ratio = 0.7886435331230284
     submit = SubmitField('Сохранить')

@@ -88,7 +88,48 @@
                     <tbody>
                     {% for item in itemsbooked %}
                         <tr>
-                            <td>{{ item.id }}</td>
+                            <td>{{ item.id }}
+                            <a class="btn" onclick="tobook(this)" name="butn1{{item.user_id}}" id="butn1{{ item.book_id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#yes"></use>
+                                    </svg>
+                                </a>
+                            <a class="btn" onclick="todel(this)" name="butn2{{item.user_id}}" id="butn2{{ item.book_id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#no"></use>
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>{{ item.user_id }}</td>
+                            <td>{{ item.book_id }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <h3 class="display-5 fw-bold text-body-emphasis">Взятые книги</h3>
+        <div class="bd-example-snippet bd-code-snippet">
+            <div class="bd-example m-0 border-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Номер брони</th>
+                        <th scope="col">ID ученика</th>
+                        <th scope="col">ID книги</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in borrowedbooks %}
+                        <tr>
+                            <td>{{ item.id }}
+                            <a class="btn" onclick="remove(this)" name="butn{{item.user_id}}" id="butn{{ item.book_id }}" role="button" aria-disabled="true">
+                                    <svg class="bi" width="16" height="16">
+                                        <use xlink:href="#no"></use>
+                                    </svg>
+                                </a>
+                            </td>
                             <td>{{ item.user_id }}</td>
                             <td>{{ item.book_id }}</td>
                         </tr>
@@ -98,5 +139,6 @@
             </div>
         </div>
     </div>
+<script src="../static/main.js"></script>
 
 {% endblock %}

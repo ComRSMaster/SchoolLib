@@ -9,4 +9,10 @@
         <h6 class="mt-2 text-body-secondary">Имя пользователя: {{ current_user.username }}</h6>
         <a class="btn btn-primary mt-4" href="/logout" role="button">Выйти</a>
     </div>
+
+<div class="container-fluid container-md py-4 mb-auto">
+    <h1 class="display-5 fw-bold text-body-emphasis">Взятые книги</h1>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="booksContainer2-book"></div>
+    <script src="../static/borrow.js"></script>
+</div>
 {% endblock %}
